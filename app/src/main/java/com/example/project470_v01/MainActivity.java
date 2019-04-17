@@ -41,13 +41,12 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogin;
     String phoneNumber;
     EditText etPhoneNumber;
+    private String verificationCode;
 
-    private static final String TAG = "PRJ_470";
+    private static final String TAG = "PRJ_470_MAIN";
 
     FirebaseAuth auth;
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
-    private String verificationCode;
-
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private ProgressBar spinner;
@@ -56,21 +55,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            Log.i(TAG,phoneNumber);
+            choose_redirect_screen();
+        }
+        else {
         setContentView(R.layout.activity_main);
         findViews();
         spinner.setVisibility(View.GONE);
-//        Intent intent = new Intent(MainActivity.this, ChooseLanguage.class);
-//        intent.putExtra("phoneNumber", phoneNumber);
-//        startActivity(intent);
-
         StartFirebaseLogin();
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Check if no view has focus:
                 spinner.setVisibility(View.VISIBLE);
                 phoneNumber="+91"+ etPhoneNumber.getText().toString();
-//                phoneNumber="+919654182997";
                 Log.i(TAG, phoneNumber + "is sent for verification");
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,                     // Phone number to verify
@@ -81,11 +81,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        etPhoneNumber.addTextChangedListener(new TextWatcher()
-        {
+        etPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (s.length() > 10)
                 {
                     hideKeyboard(MainActivity.this);
@@ -94,33 +92,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-        });
+            });
+        }
     }
 
     private void findViews() {
         btnLogin=(Button)findViewById(R.id.btnLogin);
         etPhoneNumber=findViewById(R.id.phone_number);
         spinner=findViewById(R.id.progressBar);
-    }
-
-    private void writeToFile(String data, String file_name, Context context) {
-        try {
-            OutputStreamWriter outputStreamWriter =
-                    new OutputStreamWriter(context.openFileOutput(file_name, Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
     }
 
     private void SigninWithPhone(PhoneAuthCredential credential) {
@@ -130,48 +115,43 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.i(TAG, "signInWithCredential:success");
-                            try {
-                                DocumentReference docRef = db.collection("userInfo").document(phoneNumber);
-                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                Intent intent = new Intent(MainActivity.this, SmartResume.class);
-                                                intent.putExtra("phoneNumber", phoneNumber);
-                                                startActivity(intent);
-//                                                JSONObject user_obj = new JSONObject(document.getData());
-//                                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                            } else {
-                                                Log.d(TAG, "No such document");
-                                                Intent intent = new Intent(MainActivity.this, ChooseLanguage.class);
-                                                intent.putExtra("phoneNumber", phoneNumber);
-                                                startActivity(intent);
-                                            }
-                                        } else {
-                                            Log.d(TAG, "get failed with ", task.getException());
-                                        }
-                                    }
-                                });
-//                                if (file.exists()) {
-//                                    //OPEN SMART RESUME SCREEN
-//                                    startActivity(new Intent(MainActivity.this,
-//                                            SmartResume.class));
-//                                } else {
-//                                    Intent intent = new Intent(MainActivity.this, ChooseLanguage.class);
-//                                    intent.putExtra("phoneNumber", phoneNumber);
-//                                    startActivity(intent);
-//                                }
-                                finish();
-                            } catch (NullPointerException e) {
-                                Toast.makeText(MainActivity.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                Log.e("Exception", "File write failed: " + e.toString());
-                            }
+                            choose_redirect_screen();
                         }
                     };
                 });
+    }
+
+    private void choose_redirect_screen() {
+        try {
+
+            Log.e(TAG,phoneNumber);
+            DocumentReference docRef = db.collection("userInfo").document(phoneNumber);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        finish();
+                        if (document.exists()) {
+                            Intent intent = new Intent(MainActivity.this, SmartResume.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("phoneNumber", phoneNumber);
+                            startActivity(intent);
+                        } else {
+                            Log.d(TAG, "No such document");
+                            Intent intent = new Intent(MainActivity.this, ChooseLanguage.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtra("phoneNumber", phoneNumber);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        } catch (NullPointerException e) {
+            Toast.makeText(MainActivity.this, "Failed to Authenticate", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void StartFirebaseLogin() {
@@ -206,4 +186,5 @@ public class MainActivity extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
 }

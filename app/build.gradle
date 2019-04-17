@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:18.2.0'
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.google.firebase:firebase-functions:16.3.0'
+    implementation 'com.github.aryarohit07:picasso-facedetection-transformation:0.3.0'
 
 
 }
