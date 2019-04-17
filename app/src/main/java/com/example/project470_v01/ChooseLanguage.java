@@ -41,7 +41,7 @@ public class ChooseLanguage extends AppCompatActivity {
 
         final Intent intent = new Intent(ChooseLanguage.this, LocationActivity.class);
         Bundle bundle = getIntent().getExtras();
-        assert bundle != null;
+        Log.e("Bundle", bundle.getString("phoneNumber"));
         intent.putExtra("phoneNumber", bundle.getString("phoneNumber"));
         btnEnglish.setOnClickListener(new View.OnClickListener() {
             @Override

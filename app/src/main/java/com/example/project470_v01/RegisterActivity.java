@@ -154,18 +154,26 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 Map<String, Object> user = new HashMap<>();
-
+                Log.i("FIRESTORE", user.toString());
                 user.put("pref_language",pref_language);
+                Log.i("FIRESTORE", user.toString());
                 user.put("user_name", user_name.getText().toString());
+                Log.i("FIRESTORE", user.toString());
                 user.put("dob", dob);
+                Log.i("FIRESTORE", user.toString());
                 user.put("experience", user_exp.getText().toString());
+                Log.i("FIRESTORE", user.toString());
                 user.put("addr1", addr1.getText().toString());
+                Log.i("FIRESTORE", user.toString());
                 user.put("addr2", addr2.getText().toString());
 //                user.put("image", imageB64);
+
                 Log.i("FIRESTORE", user.toString());
 
                 db.collection("userInfo").document(phoneNumber).set(user);
-                startActivity(new Intent(RegisterActivity.this, SmartResume.class));
+                final Intent intent = new Intent(RegisterActivity.this, SmartResume.class);
+                intent.putExtra("phoneNumber", phoneNumber);
+                startActivity(intent);
             }
         });
     }
@@ -214,8 +222,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
-            mProgress.setMessage("Uploading Image .. ");
-            mProgress.show();
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             StorageReference imageRef = storageRef.child(phoneNumber);

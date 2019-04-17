@@ -32,6 +32,7 @@ import java.util.Locale;
 public class LocationActivity extends AppCompatActivity {
 
     public static final int REQUEST_PERMISSION = 200;
+    private String phoneNumber, pref_language;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +46,9 @@ public class LocationActivity extends AppCompatActivity {
                     REQUEST_PERMISSION);
         }
 
-        final Intent intent = new Intent(LocationActivity.this, RegisterActivity.class);
         Bundle bundle = getIntent().getExtras();
-        assert bundle != null;
-        intent.putExtra("phoneNumber", bundle.getString("phoneNumber"));
-        intent.putExtra("pref_language", bundle.getString("pref_language"));
+        phoneNumber = bundle.getString("phoneNumber");
+        pref_language = bundle.getString("pref_language");
 
         MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
             @Override
@@ -68,8 +67,10 @@ public class LocationActivity extends AppCompatActivity {
                     addr_obj.put("state", addresses.get(0).getAdminArea());
                     addr_obj.put("country", addresses.get(0).getCountryName());
                     addr_obj.put("postalcode", addresses.get(0).getPostalCode());
-                    String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     Log.i("got_location", addr_obj.toString());
+                    final Intent intent = new Intent(LocationActivity.this, RegisterActivity.class);
+                    intent.putExtra("phoneNumber", phoneNumber);
+                    intent.putExtra("pref_language", pref_language);
                     intent.putExtra("addr1", addr_obj.getString("address"));
                     intent.putExtra("addr2", addr_obj.getString("city") + ", "+addr_obj.getString("state") + ", "+addr_obj.getString("country"));
                     startActivity(intent);

@@ -59,7 +59,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViews();
         spinner.setVisibility(View.GONE);
-//        startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+//        Intent intent = new Intent(MainActivity.this, ChooseLanguage.class);
+//        intent.putExtra("phoneNumber", phoneNumber);
+//        startActivity(intent);
+
         StartFirebaseLogin();
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
