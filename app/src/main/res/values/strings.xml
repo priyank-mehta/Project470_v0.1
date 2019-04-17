@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name" translatable="false">Project470</string>
+    <string name="lang_gujarati" translatable="false">ગુજરાતી</string>
+    <string name="lang_english" translatable="false">English</string>
+    <string name="lang_hindi" translatable="false">हिंदी</string>
+    <string name="lang_marathi" translatable="false">मराठी</string>
+    <string name="upload_photo">UPLOAD PHOTO</string>
+    <string name="name">Name</string>
+    <string name="dob">Date of Birth</string>
+    <string name="experience">Experience (in years)</string>
+    <string name="addr1">House No,Building,Street Name</string>
+    <string name="addr2">City, State, Country</string>
+    <string name="btnSubmit">SUBMIT</string>
+    <string name="person_details">PERSONAL DETAILS</string>
+    <string name="ph_hint">Enter your 10 digit phone number</string>
+    <string name="btnLoginTxt">Login</string>
+</resources>

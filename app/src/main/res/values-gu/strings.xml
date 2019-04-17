@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btnSubmit">સબમિટ કરો</string>
+    <string name="addr2">શહેર, રાજ્ય, દેશ</string>
+    <string name="addr1">હાઉસ નં, બિલ્ડિંગ, ગલી નામ</string>
+    <string name="experience">અનુભવ (વર્ષોમાં)</string>
+    <string name="dob">જન્મ તારીખ</string>
+    <string name="name">નામ</string>
+    <string name="person_details">અંગત વિગતો</string>
+    <string name="upload_photo">ફોટો આપો</string>
+    <string name="ph_hint">તમારો 10 અંકનો ફોન નંબર દાખલ કરો</string>
+    <string name="btnLoginTxt">પ્રવેશ કરો</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="person_details">व्यक्तिगत विवरण</string>
+    <string name="name">नाम</string>
+    <string name="dob">जन्म तिथि</string>
+    <string name="experience">अनुभव (सालों में)</string>
+    <string name="addr1">घर का नाम, सड़क का नाम</string>
+    <string name="addr2">शहर राज्य देश</string>
+    <string name="btnSubmit">जमा करें</string>
+    <string name="upload_photo">" फोटो दें"</string>
+    <string name="ph_hint">अपना 10 अंकों वाला फ़ोन नंबर दर्ज करें</string>
+    <string name="btnLoginTxt">लॉग इन करें</string>
+</resources>
